@@ -42,6 +42,7 @@ export function addPoints(pt: THREE.Points) {
 }
 
 var camera: THREE.PerspectiveCamera;
+var orthoCamera: THREE.OrthographicCamera;
 var controls: OrbitControls;
 
 export function getControlsState() {
@@ -54,6 +55,12 @@ export function setControls(enabled: boolean) {
 
 export function setupThreeScene() {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+    orthoCamera = new THREE.OrthographicCamera(
+        window.innerWidth / -2 / scale,
+        window.innerWidth / 2 / scale,
+        window.innerHeight / 2 / scale,
+        window.innerHeight / - 2 / scale,
+        1, 1000);
     camera.position.set(25, 50, 100);
     camera.lookAt(25, 25, 25);
     var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -110,7 +117,7 @@ export function setupThreeScene() {
     let mouseDown = false;
 
     document.oncontextmenu = e => {
-        if(actionMode==="ADD"){
+        if (actionMode === "ADD") {
 
             e.preventDefault?.();
             e.stopPropagation?.();
@@ -119,9 +126,9 @@ export function setupThreeScene() {
     };
 
     document.addEventListener('mousedown', e => {
-        console.log("click!",e);
+        console.log("click!", e);
         if (!mouseDown && actionMode === "SELECT") {
-            if(e.button === 2) { return; }
+            if (e.button === 2) { return; }
             var intersects = raycaster.intersectObjects(lines, true);
 
             if (intersects.length > 0) {
@@ -140,14 +147,14 @@ export function setupThreeScene() {
         }
 
         if (!mouseDown && actionMode === "ADD" && getPendingBoard()) {
-            if(e.button === 2) { 
+            if (e.button === 2) {
                 // rotate the item somehow...
 
                 getPendingBoard()!.rotateX().setOrigin(getPendingBoard()!.origin);
 
                 return;
-             }
-             else {
+            }
+            else {
                 var intersects = raycaster.intersectObjects(lines, true);
 
                 if (intersects.length > 0) {
@@ -157,37 +164,37 @@ export function setupThreeScene() {
                     setPendingBoard(null);
                     renderApp();
                 }
-             }
+            }
         }
 
         mouseDown = true;
     });
 
     document.addEventListener('keydown', e => {
-        if(actionMode === "ADD"){
+        if (actionMode === "ADD") {
             const pendingBoard = getPendingBoard();
-            if(pendingBoard){
-                switch (e.key){
+            if (pendingBoard) {
+                switch (e.key) {
                     case "a":
-                    pendingBoard.rotateY();
-                    break;
+                        pendingBoard.rotateY();
+                        break;
                     case "d":
-                    pendingBoard.rotateY(Math.PI / -2);
-                    break;
-                    
+                        pendingBoard.rotateY(Math.PI / -2);
+                        break;
+
                     case "s":
-                    pendingBoard.rotateX();
-                    break;
+                        pendingBoard.rotateX();
+                        break;
                     case "w":
-                    pendingBoard.rotateX(Math.PI / -2);
-                    break;
-                    
+                        pendingBoard.rotateX(Math.PI / -2);
+                        break;
+
                     case "q":
-                    pendingBoard.rotateZ();
-                    break;
+                        pendingBoard.rotateZ();
+                        break;
                     case "e":
-                    pendingBoard.rotateZ(Math.PI / -2);
-                    break;
+                        pendingBoard.rotateZ(Math.PI / -2);
+                        break;
                 }
             }
         }
@@ -196,10 +203,10 @@ export function setupThreeScene() {
             SetMode("MOVE");
         }
         if (e.key === "s") {
-        //    SetMode("SELECT");
+            //    SetMode("SELECT");
         }
         if (e.key === "a") {
-         //   SetMode("ADD");
+            //   SetMode("ADD");
         }
     });
 
@@ -244,8 +251,8 @@ export function setupThreeScene() {
 
             const pendingBoard = getPendingBoard();
             if (pendingBoard) {
-            getPendingBoard()?.show();
-            pendingBoard.setOrigin(intersects[0].point);
+                getPendingBoard()?.show();
+                pendingBoard.setOrigin(intersects[0].point);
             }
 
         } else {
@@ -283,11 +290,20 @@ export function setupThreeScene() {
             el.style.position = "absolute";
             document.body.appendChild(el);
             el.style.color = color;
+            el.style.cursor = "pointer";
+            el.onclick = () => {
+                camera.position.copy(new Vector3(10, 10, 10).multiply(axis));
+            };
         }
 
         el.innerText = label;
         el.style.top = vector.y + "px";
         el.style.left = vector.x + "px";
+    }
+
+    function basicallyEqual(a: number, b: number, margin: number = .1) {
+        if (a - margin <= b && a + margin >= b) { return true; }
+        return false;
     }
 
     // Finally render the scene!
@@ -301,8 +317,24 @@ export function setupThreeScene() {
         labelAxes(yAxis, "yaxis", "Y", "green");
         labelAxes(zAxis, "zaxis", "Z", "blue");
 
-        renderer.render(scene, camera);
+        orthoCamera.position.copy(camera.position);
+        orthoCamera.lookAt(0,0,0);
 
+        let useOrth = false;
+        if (basicallyEqual(camera.position.x, 0)
+            && basicallyEqual(camera.position.y, 0)) {
+            useOrth = true;
+        }
+        if (basicallyEqual(camera.position.z, 0)
+            && basicallyEqual(camera.position.y, 0)) {
+            useOrth = true;
+        }
+        if (basicallyEqual(camera.position.x, 0)
+            && basicallyEqual(camera.position.z, 0)) {
+            useOrth = true;
+        }
+
+        renderer.render(scene, useOrth ? orthoCamera : camera);
     }
 
     animate();

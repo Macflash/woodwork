@@ -88,12 +88,21 @@ function App() {
               Cancel
             </button>
 
-            : <button style={buttonStyle} onClick={() => {
-              setPendingBoard(new Board(2, 4, 12, undefined, true));
-              rerender();
-            }}>
-              2x4
+            : <>
+              <button style={buttonStyle} onClick={() => {
+                setPendingBoard(new Board(2, 4, 12, undefined, true));
+                rerender();
+              }}>
+                2x4
         </button>
+
+              <button style={buttonStyle} onClick={() => {
+                setPendingBoard(new Board(12, .75, 12, undefined, true));
+                rerender();
+              }}>
+                Plywood
+        </button>
+            </>
           }
         </div>
         : null}
