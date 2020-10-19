@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/woodowrk/static/css/main.14dad1a1.chunk.css",
+    "main.js": "/woodowrk/static/js/main.403b7067.chunk.js",
+    "main.js.map": "/woodowrk/static/js/main.403b7067.chunk.js.map",
+    "runtime-main.js": "/woodowrk/static/js/runtime-main.fb5df4d9.js",
+    "runtime-main.js.map": "/woodowrk/static/js/runtime-main.fb5df4d9.js.map",
+    "static/js/2.5c985703.chunk.js": "/woodowrk/static/js/2.5c985703.chunk.js",
+    "static/js/2.5c985703.chunk.js.map": "/woodowrk/static/js/2.5c985703.chunk.js.map",
+    "index.html": "/woodowrk/index.html",
+    "precache-manifest.b4d3580cb618ede63edcaa97dca4a5d1.js": "/woodowrk/precache-manifest.b4d3580cb618ede63edcaa97dca4a5d1.js",
+    "service-worker.js": "/woodowrk/service-worker.js",
+    "static/css/main.14dad1a1.chunk.css.map": "/woodowrk/static/css/main.14dad1a1.chunk.css.map",
+    "static/js/2.5c985703.chunk.js.LICENSE.txt": "/woodowrk/static/js/2.5c985703.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fb5df4d9.js",
+    "static/js/2.5c985703.chunk.js",
+    "static/css/main.14dad1a1.chunk.css",
+    "static/js/main.403b7067.chunk.js"
+  ]
+}
