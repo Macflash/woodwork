@@ -54,8 +54,7 @@ export class Board {
         this.vertices.forEach(v => v.subVectors(v, this.origin));
         this.origin = origin;
         this.vertices.forEach(v => v.addVectors(v, this.origin));
-        var points = this.getLinePoints();
-        this.line!.geometry = new THREE.BufferGeometry().setFromPoints(points);
+        this.updateGeometry();
     }
 
     private createVerts() {
@@ -73,6 +72,11 @@ export class Board {
         verts.push(new Vector3(this.width, 0, this.length));
 
         return verts.map(v => v.add(this.origin));
+    }
+
+    updateGeometry(){
+        var points = this.getLinePoints();
+        this.line!.geometry = new THREE.BufferGeometry().setFromPoints(points);
     }
 
     updateColor() {
@@ -189,18 +193,21 @@ export class Board {
         return line;
     }
 
-    rotateX() {
-        this.vertices.forEach(v => v.subVectors(v, this.origin).applyAxisAngle(new Vector3(1, 0, 0), Math.PI / 2).addVectors(v, this.origin));
+    rotateX(angle?: number) {
+        console.log("angle", angle);
+        angle = angle === undefined ? (Math.PI / 2) : angle;
+        console.log("used angle", angle);
+        this.vertices.forEach(v => v.subVectors(v, this.origin).applyAxisAngle(new Vector3(1, 0, 0), angle === undefined ? (Math.PI / 2) : angle).addVectors(v, this.origin));
         return this;
     }
 
-    rotateY() {
-        this.vertices.forEach(v => v.subVectors(v, this.origin).applyAxisAngle(new Vector3(0, 1, 0), Math.PI / 2).addVectors(v, this.origin));
+    rotateY(angle?: number) {
+        this.vertices.forEach(v => v.subVectors(v, this.origin).applyAxisAngle(new Vector3(0, 1, 0), angle === undefined ? (Math.PI / 2) : angle).addVectors(v, this.origin));
         return this;
     }
 
-    rotateZ() {
-        this.vertices.forEach(v => v.subVectors(v, this.origin).applyAxisAngle(new Vector3(0, 0, 1), Math.PI / 2).addVectors(v, this.origin));
+    rotateZ(angle?: number) {
+        this.vertices.forEach(v => v.subVectors(v, this.origin).applyAxisAngle(new Vector3(0, 0, 1), angle === undefined ? (Math.PI / 2) : angle).addVectors(v, this.origin));
         return this;
     }
 }

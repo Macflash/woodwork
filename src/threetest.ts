@@ -160,19 +160,46 @@ export function setupThreeScene() {
              }
         }
 
-
         mouseDown = true;
     });
 
     document.addEventListener('keydown', e => {
-        if (e.key == "m" || e.key == "Escape") {
+        if(actionMode === "ADD"){
+            const pendingBoard = getPendingBoard();
+            if(pendingBoard){
+                switch (e.key){
+                    case "a":
+                    pendingBoard.rotateY();
+                    break;
+                    case "d":
+                    pendingBoard.rotateY(Math.PI / -2);
+                    break;
+                    
+                    case "s":
+                    pendingBoard.rotateX();
+                    break;
+                    case "w":
+                    pendingBoard.rotateX(Math.PI / -2);
+                    break;
+                    
+                    case "q":
+                    pendingBoard.rotateZ();
+                    break;
+                    case "e":
+                    pendingBoard.rotateZ(Math.PI / -2);
+                    break;
+                }
+            }
+        }
+
+        if (e.key === "m" || e.key === "Escape") {
             SetMode("MOVE");
         }
-        if (e.key == "s") {
-            SetMode("SELECT");
+        if (e.key === "s") {
+        //    SetMode("SELECT");
         }
-        if (e.key == "a") {
-            SetMode("ADD");
+        if (e.key === "a") {
+         //   SetMode("ADD");
         }
     });
 
@@ -188,7 +215,6 @@ export function setupThreeScene() {
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
     }, false);
-
 
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
@@ -280,5 +306,4 @@ export function setupThreeScene() {
     }
 
     animate();
-
 }
