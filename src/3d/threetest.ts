@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { Vector2, Vector3 } from 'three';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { getBoardByName, getBoards, getPendingBoard, setPendingBoard } from './board';
-import { renderApp } from './renderHelper';
+import { getBoardByName, getBoards, getPendingBoard, setPendingBoard } from '../lumber/board';
+import { renderApp } from '../renderHelper';
 
-type ActionMode = "MOVE" | "SELECT" | "ADD";
+export type ActionMode = "MOVE" | "SELECT" | "ADD";
 
 var actionMode: ActionMode = "MOVE";
 
@@ -155,13 +155,14 @@ export function setupThreeScene() {
                 return;
             }
             else {
+                // PLACE THE BOARD IN THE SCENE!
                 var intersects = raycaster.intersectObjects(lines, true);
-
                 if (intersects.length > 0) {
                     getPendingBoard()?.setOrigin(intersects[0].point);
                     const newBoard = getPendingBoard()!;
                     newBoard.fix();
                     setPendingBoard(null);
+                    newBoard.select();
                     renderApp();
                 }
             }

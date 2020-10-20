@@ -1,4 +1,4 @@
-import { addLine, getScene, getScale, addPoints } from "./threetest";
+import { addLine, getScene, getScale, addPoints } from "../3d/threetest";
 import * as THREE from 'three';
 import { Vector3 } from "three";
 
@@ -80,7 +80,11 @@ export class Board {
     }
 
     updateColor() {
-        if (this.pending) { this.line!.material = new THREE.LineBasicMaterial({ color: 0xFFFF00 }); }
+        if (this.pending) { 
+            if(this.line! instanceof THREE.LineDashedMaterial){return;}
+            this.line!.material = new THREE.LineDashedMaterial({ color: 0xFFFF00 });
+            this.line?.computeLineDistances();
+         }
         else if (this.selected) { this.line!.material = new THREE.LineBasicMaterial({ color: 0xFF0066 }); }
         else if (this.hovered) { this.line!.material = new THREE.LineBasicMaterial({ color: 0x00FFFF }); }
         else { this.line!.material = new THREE.LineBasicMaterial({ color: 0x00FF66 }); }
@@ -128,6 +132,7 @@ export class Board {
         //addPoints(points);
 
         const line = this.getLines();
+        line.computeLineDistances();
         scene.add(line);
         if(!this.pending){
             addLine(line);
